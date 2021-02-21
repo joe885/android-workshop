@@ -1,20 +1,27 @@
 package com.warpwood.workshopapp
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.koin.core.component.KoinApiExtension
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class FeedViewModel : ViewModel() {
+@KoinApiExtension
+class FeedViewModel : ViewModel(), KoinComponent {
 
     private val feedItems = MutableLiveData<List<FeedItem>>()
+    private val feedService by inject<FeedApiService>()
 
     fun getFeed(): LiveData<List<FeedItem>> = feedItems
 
     fun loadFeed() {
-        feedItems.value = listOf(
-            FeedItem("First item"),
-            FeedItem("Second item"),
-            FeedItem("Third item")
-        )
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = feedService.getFeed().items
+            withContext(Dispatchers.Main) {
+                feedItems.value = result
+            }
+        }
     }
 }
