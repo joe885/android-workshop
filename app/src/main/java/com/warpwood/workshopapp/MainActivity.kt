@@ -2,6 +2,7 @@ package com.warpwood.workshopapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.warpwood.workshopapp.databinding.ActivityMainBinding
@@ -23,7 +24,15 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.getFeed().observe(this) {
             feedListAdapter.setFeedItems(it)
+            binding.progressSpinner.visibility = View.GONE
+            binding.swipeLayout.isRefreshing = false
         }
+
+        binding.swipeLayout.setOnRefreshListener {
+            viewModel.loadFeed()
+        }
+
+        binding.progressSpinner.visibility = View.VISIBLE
         viewModel.loadFeed()
     }
 }
