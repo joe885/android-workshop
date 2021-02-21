@@ -18,5 +18,13 @@ class MainActivity : AppCompatActivity() {
 
         binding.feedList.adapter = feedListAdapter
         binding.feedList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+
+        feedListAdapter.setFeedItems(
+            listOf(
+                FeedItem("First item"),
+                FeedItem("Second item"),
+                FeedItem("Third item")
+            )
+        )
     }
 }

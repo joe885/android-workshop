@@ -8,7 +8,13 @@ import com.warpwood.workshopapp.databinding.FeedItemBinding
 
 class FeedListAdapter: RecyclerView.Adapter<FeedListAdapter.ViewHolder>() {
 
-    private val items: List<FeedItem> = listOf()
+    private val items: MutableList<FeedItem> = mutableListOf()
+
+    fun setFeedItems(feedItems: List<FeedItem>) {
+        items.clear()
+        items.addAll(feedItems)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.feed_item, parent, false)
